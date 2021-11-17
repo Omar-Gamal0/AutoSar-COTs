@@ -195,7 +195,17 @@ void Port_Init(const Port_ConfigType* ConfigPtr)
 				{
 				case STD_HIGH:
 
-					Dio_WriteChannel(PinCounter, STD_HIGH);
+					switch(PinCounter/16)
+					{
+					case DIO_PORTA:
+						MGPIO_PORTA->BSRR = (1<<(PinCounter%16));		break;
+					case DIO_PORTB:
+						MGPIO_PORTB->BSRR = (1<<(PinCounter%16));		break;
+					case DIO_PORTC:
+						MGPIO_PORTC->BSRR = (1<<(PinCounter%16)); 		break;
+					default:
+						break;
+					}
 
 					break;
 
@@ -283,16 +293,16 @@ void Port_Init(const Port_ConfigType* ConfigPtr)
 				/* Enabling internal Pull up resistor */
 
 				switch(PinCounter/16)
-					{
-						case DIO_PORTA:
-							MGPIO_PORTA->BSRR = (1<<(PinCounter%16));		break;
-						case DIO_PORTB:
-							MGPIO_PORTB->BSRR = (1<<(PinCounter%16));		break;
-						case DIO_PORTC:
-							MGPIO_PORTC->BSRR = (1<<(PinCounter%16)); 		break;
-						default:
-							break;
-					}
+				{
+				case DIO_PORTA:
+					MGPIO_PORTA->BSRR = (1<<(PinCounter%16));		break;
+				case DIO_PORTB:
+					MGPIO_PORTB->BSRR = (1<<(PinCounter%16));		break;
+				case DIO_PORTC:
+					MGPIO_PORTC->BSRR = (1<<(PinCounter%16)); 		break;
+				default:
+					break;
+				}
 
 				break;		/* End of case PORT_PIN_WITH_PULL_UP*/
 
